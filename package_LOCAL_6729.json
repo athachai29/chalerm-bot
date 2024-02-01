@@ -4,12 +4,9 @@
   "main": "src/app.js",
   "license": "MIT",
   "type": "module",
-<<<<<<< HEAD
   "engines": {
     "node": "16.x"
   },
-=======
->>>>>>> 48509bb2377d9155bd686a38f49b817a78d89df4
   "scripts": {
     "start": "node src/app.js",
     "register": "node src/commands.js",
