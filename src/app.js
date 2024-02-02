@@ -93,7 +93,7 @@ app.post('/api/interactions', async (req, res) => {
 
         case InteractType.ADD:
           try {
-            console.log('hello world: ',new URL(import.meta.url).pathname);
+            console.log('hello world: ',new URL(import.meta.url));
             // const json = await readFile(`${__dirname}/src/data/stores.json`);
             // const favorites = JSON.parse(json);
 
