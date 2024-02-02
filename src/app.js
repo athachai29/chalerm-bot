@@ -82,7 +82,7 @@ app.post('/api/interactions', async (req, res) => {
           }
 
           // 3. convert url for ready to play
-          const userFavSongsConverted = userFavSongs?.songs?.map((item) => item.url);
+          const userFavSongsConverted = userFavSongs?.songs?.map((item) => `/play ${item.url}`);
           if (!userFavSongsConverted?.length) {
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -109,7 +109,6 @@ app.post('/api/interactions', async (req, res) => {
             })
           }
         
-
         case InteractType.ADD:
           try {
             const json = await readFile(`${__dirname}/data/stores.json`);
@@ -128,19 +127,18 @@ app.post('/api/interactions', async (req, res) => {
               })
             }
 
-            const newFavoriteSong = {
+            dataStore.favorites[userId].songs.push({
+              id: crypto.randomUUID(),
               title: title.value,
               url: convertUrl
-            }
-
-            dataStore.favorites[userId].songs.push(newFavoriteSong)
+            })
            
             await writeFile(`${__dirname}/data/stores.json`, JSON.stringify(dataStore, undefined, 2))
 
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: newFavoriteSong,
+                content: `@${member.user.global_name} /play ${convertUrl}`,
               },
             });
           } catch (err) {
