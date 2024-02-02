@@ -8,7 +8,7 @@ const CONVERT_URL_COMMAND = {
   options: [
     {
       type: 3,
-      name: 'url',
+      name: InteractType.URL,
       description: 'URL to convert',
       required: true,
     },

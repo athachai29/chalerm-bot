@@ -30,7 +30,9 @@ export async function discordRequest(endpoint, options) {
   // append endpoint to root API URL
   const url = 'https://discord.com/api/v10/' + endpoint;
   // Stringify payloads
-  if (options.body) options.body = JSON.stringify(options.body);
+  if (options.body) {
+    options.body = JSON.stringify(options.body);
+  }
   // Use node-fetch to make requests
   const res = await fetch(url, {
     headers: {
@@ -75,15 +77,15 @@ export async function installGlobalCommands(appId, commands) {
 export function urlConverter(url) {
   // Extract video ID from the input URL
   let videoId = undefined;
-  const regex1 = /youtu\.be\/([a-zA-Z0-9_-]+)/;
-  const regex2 = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
+  const youtubeSharedRegex = /youtu\.be\/([a-zA-Z0-9_-]+)/;
+  const youtubeLinkRegex = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
 
-  if (regex1.test(url)) {
-    videoId = url.match(regex1)?.[1];
+  if (youtubeSharedRegex.test(url)) {
+    videoId = url.match(youtubeSharedRegex)?.[1];
   }
 
-  if (regex2.test(url)) {
-    videoId = url.match(regex2)?.[1];
+  if (youtubeLinkRegex.test(url)) {
+    videoId = url.match(youtubeLinkRegex)?.[1];
   }
 
   if (!videoId) {
@@ -91,7 +93,5 @@ export function urlConverter(url) {
   }
 
   // Construct the desired URL format
-  const convertedUrl = `https://play.laibaht.ovh/watch?v=${videoId}`;
-
-  return convertedUrl;
+  return `https://play.laibaht.ovh/watch?v=${videoId}`;
 }
