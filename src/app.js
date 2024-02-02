@@ -161,7 +161,7 @@ app.post('/api/interactions', async (req, res) => {
             const json = await readFile(`${__dirname}/data/stores.json`);
             const dataStore = JSON.parse(json);
             const userId = member.user.id;
-            if (!dataStore.favorites[userId]) {
+            if (!dataStore.favorites[userId] || !dataStore.favorites[userId]?.songs?.length) {
               return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                 data: {
@@ -169,6 +169,7 @@ app.post('/api/interactions', async (req, res) => {
                 },
               });
             }
+            
             const song = dataStore.favorites[userId]?.songs?.find((song) => song.id === id.value);
 
             const index = dataStore.favorites[userId]?.songs?.findIndex((song) => song.id !== id.value);
