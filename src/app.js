@@ -61,7 +61,8 @@ app.post('/api/interactions', async (req, res) => {
           });
         case InteractType.FAV:
           // 1. get user id
-          const userId = member.user.id; // not sure
+          const userId = member.user.id;
+
           // 2. get fav songs from favSongs for that user
           const userFavSongs = favoriteOurSongs.get(userId);
           if (!userFavSongs) {
