@@ -110,7 +110,7 @@ app.post('/api/interactions', async (req, res) => {
         case InteractType.ADD:
           try {
             listMes.push(member.user.id);
-            const json = await readFile('./favorites/favorites.json');
+            const json = await readFile('./data/stores.json');
             const favorites = JSON.parse(json);
 
             console.log(favorites, data);
