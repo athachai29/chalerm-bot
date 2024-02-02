@@ -39,11 +39,11 @@ const ADD_FAV_COMMAND = {
       required: true,
     },
   ],
-  type: 2,
+  type: 1,
 };
 
 const DEL_FAV_COMMAND = {
-  name: 'del',
+  name: InteractType.DEL,
   description: 'add favourite your favorite songs',
   options: [
     {
