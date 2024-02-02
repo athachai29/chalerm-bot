@@ -31,6 +31,7 @@ app.get('/health', (_, res) => {
 app.post('/api/interactions', async (req, res) => {
   // Interaction type and data
   const { type, data, member } = req.body;
+  console.log(data, type)
 
   switch (type) {
     case InteractionType.PING:
@@ -41,20 +42,8 @@ app.post('/api/interactions', async (req, res) => {
         case InteractType.URL:
           const url = data['options'][0]['value'];
 
-          // Extract video ID from the input URL
-          let videoId = undefined;
-          const regex1 = /youtu\.be\/([a-zA-Z0-9_-]+)/;
-          const regex2 = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
-
-          if (regex1.test(url)) {
-            videoId = url.match(regex1)?.[1];
-          }
-
-          if (regex2.test(url)) {
-            videoId = url.match(regex2)?.[1];
-          }
-
-          if (!videoId) {
+          const videoUrl = urlConverter(url)
+          if (!videoUrl) {
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
@@ -63,14 +52,11 @@ app.post('/api/interactions', async (req, res) => {
             });
           }
 
-          // Construct the desired URL format
-          const convertedUrl = `https://play.laibaht.ovh/watch?v=${videoId}`;
-
           // Send a message into the channel where command was triggered from
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: `/play ${convertedUrl}`,
+              content: `/play ${videoUrl}`,
             },
           });
         case InteractType.FAV:
@@ -108,8 +94,7 @@ app.post('/api/interactions', async (req, res) => {
 
         case InteractType.ADD:
           try {
-            listMes.push(member.user.id);
-            const json = await readFile('./data/stores.json');
+            const json = await readFile(`${__dirname}/src/data/stores.json`);
             const favorites = JSON.parse(json);
 
             console.log(favorites, data);
@@ -117,7 +102,7 @@ app.post('/api/interactions', async (req, res) => {
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: listMes.join('\n'),
+                content: "hello world",
               },
             });
           } catch (err) {
