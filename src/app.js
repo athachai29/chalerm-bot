@@ -140,7 +140,7 @@ app.post('/api/interactions', async (req, res) => {
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: `/play ${convertUrl}`,
+                content: `/play ${convertUrl} <@${userId}>`,
               },
             });
           } catch (err) {
