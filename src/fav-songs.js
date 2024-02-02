@@ -1,5 +1,5 @@
-export default [
-  {
+export const favoriteOurSongs = new Map()
+  .set("643244907615485955", {
     userId: "643244907615485955",
     name: "pele",
     songs: [
@@ -12,8 +12,8 @@ export default [
         url: "https://youtu.be/wUU3oXhO2iE?si=f16zvy5zZbeLMufT",
       },
     ],
-  },
-  {
+  })
+  .set("235679849635643392", {
     userId: "235679849635643392",
     name: "jiw",
     songs: [
@@ -26,8 +26,8 @@ export default [
         url: "https://youtu.be/wUU3oXhO2iE?si=f16zvy5zZbeLMufT",
       },
     ],
-  },
-  {
+  })
+  .set("372744261055152130", {
     userId: "372744261055152130",
     name: "earng",
     songs: [
@@ -40,8 +40,8 @@ export default [
         url: "https://youtu.be/lWFge60Pdbc?si=iYoyv43sG7WW0z-h",
       },
     ],
-  },
-  {
+  })
+  .set("257916712425488406", {
     userId: "257916712425488406",
     name: "ploy",
     songs: [
@@ -50,10 +50,4 @@ export default [
         url: "https://youtu.be/aZDlaZCpKYw?si=LZkkY3Sr2_oSmjD0",
       },
     ],
-  },
-];
-_oSmjD0"
-      }
-    ]
-  }
-]
+  });

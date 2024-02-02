@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express from "express";
 import { InteractionType, InteractionResponseType } from "discord-interactions";
-import { VerifyDiscordRequest, UrlConverter } from "./utils.js";
-import favSongs from './fav-songs.js'
+import { verifyDiscordRequest, urlConverter } from "./utils.js";
+import { favoriteOurSongs } from "./fav-songs.js";
 
 // Create an express app
 const app = express();
@@ -66,19 +66,25 @@ app.post("/api/interactions", async function (req, res) {
         case "fav":
           // 1. get user id
           const userId = member.user.id; // not sure
-          console.log('userId', userId);
           // 2. get fav songs from favSongs for that user
-          const userFavSongs = favSongs.find(item => item.userId === userId);
-          console.log('userFavSongs', userFavSongs);
+          const userFavSongs = favoriteOurSongs.get(userId);
+          if (!userFavSongs) {
+           return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: "your account doesn't setup for favorite song, please contact ppppp313 or _jiw",
+            },
+          });
+          }
           // 3. convert url for ready to play
-          const userFavSongsConverted = userFavSongs.songs.map(item => {
-            return `/play ${UrlConverter(item.url)}`;
+          const userFavSongsConverted = userFavSongs?.songs?.map((item) => {
+            return `/play ${urlConverter(item.url)}`;
           });
           // 4. return a list of fav song
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              // content: userFavSongsConverted.join('\n'),
+              content: userFavSongsConverted.join("\n"),
             },
           });
         default:
@@ -100,6 +106,4 @@ app.post("/api/interactions", async function (req, res) {
   }
 });
 
-app.listen(PORT, () => {
-  console.log("Listening on port", PORT);
-});
+app.listen(PORT, () => 
