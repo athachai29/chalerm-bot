@@ -99,10 +99,10 @@ app.post('/api/interactions', async (req, res) => {
 
             const __filename = fileURLToPath(import.meta.url);
             const __dirname = dirname(__filename);
-            // const json = await readFile(`${__dirname}/src/data/stores.json`);
-            // const favorites = JSON.parse(json);
+            const json = await readFile(`${__dirname}/data/stores.json`);
+            const favorites = JSON.parse(json);
 
-            console.log(data, __dirname);
+            console.log(data, favorites);
 
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
