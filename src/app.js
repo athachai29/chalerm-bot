@@ -153,33 +153,42 @@ app.post('/api/interactions', async (req, res) => {
           }
 
         case InteractType.DEL:
-          const options = data['options'];
-          const [id] = options;
-          const json = await readFile(`${__dirname}/data/stores.json`);
-          const dataStore = JSON.parse(json);
-          const userId = member.user.id;
-          if (!dataStore.favorites[userId]) {
+          try {
+            
+            const options = data['options'];
+            const [id] = options;
+            const json = await readFile(`${__dirname}/data/stores.json`);
+            const dataStore = JSON.parse(json);
+            const userId = member.user.id;
+            if (!dataStore.favorites[userId]) {
+              return res.send({
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: {
+                  content: `user ${member.user.global_name} doesn't exist favorite song, could you please add new favorite`,
+                },
+              });
+            }
+  
+            dataStore.favorites[userId].songs.filter((song) => song.id !== id);
+  
+            await writeFile(`${__dirname}/data/stores.json`, JSON.stringify(dataStore, undefined, 2));
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: `user ${member.user.global_name} doesn't exist favorite song, could you please add new favorite`,
+                content: '',
               },
             });
+          } catch (err) {
+            return res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content: `bad request for delete favorite songs,please contact ppppp313 or _jiw`,
+              },
+            });
+            
           }
-
- 
-
-          dataStore.favorites[userId].songs.filter((song) => song.id !== id)
-
-          await writeFile(`${__dirname}/data/stores.json`, JSON.stringify(dataStore, undefined, 2));
-          return res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: '',
-            },
-          });
         default:
-         return res.send({
+          return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
               content: `doesn't support this commands`,
