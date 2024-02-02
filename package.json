@@ -5,13 +5,12 @@
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": ">=16.x"
+    "node": "16.x"
   },
   "scripts": {
     "start": "node src/app.js",
     "register": "node src/commands.js",
-    "dev": "nodemon src/app.js",
-    "format": "prettier . --write"
+    "dev": "nodemon src/app.js"
   },
   "dependencies": {
     "discord-interactions": "^3.4.0",
@@ -20,7 +19,6 @@
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3",
-    "prettier": "^3.2.4"
+    "nodemon": "^3.0.3"
   }
 }
