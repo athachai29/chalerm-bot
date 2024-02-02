@@ -6,8 +6,6 @@ import { favoriteOurSongs } from './fav-songs.js';
 import { readFile, writeFile } from 'fs/promises';
 import { InteractType } from './enum.js';
 
-const listMes = [];
-
 // Create an express app
 const app = express();
 // Get port, or default to 3000
