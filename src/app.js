@@ -6,7 +6,7 @@ import { readFile, writeFile } from 'fs/promises';
 import { InteractType } from './enum.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { v5 as uuidV5 } from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -128,7 +128,7 @@ app.post('/api/interactions', async (req, res) => {
             }
 
             dataStore.favorites[userId].songs.push({
-              id: uuidV5(),
+              id: uuidV4(),
               title: title.value,
               url: convertUrl,
             });
