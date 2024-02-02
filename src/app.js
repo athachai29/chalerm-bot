@@ -8,6 +8,9 @@ import { InteractType } from './enum.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 // Create an express app
 const app = express();
 // Get port, or default to 3000
@@ -95,19 +98,38 @@ app.post('/api/interactions', async (req, res) => {
 
         case InteractType.ADD:
           try {
-            console.log('hello world: ', new URL(import.meta.url));
-
-            const __filename = fileURLToPath(import.meta.url);
-            const __dirname = dirname(__filename);
             const json = await readFile(`${__dirname}/data/stores.json`);
-            const favorites = JSON.parse(json);
+            const dataStore = JSON.parse(json);
+            const options = data['options'];
+            const [url, title] = options;
+            const userId = member.user.id;
+            const favourite = dataStore.favorites[userId]
+            if (!favourite) {
+              //
+              return
+            }
 
-            console.log(data, favorites);
+            const convertUrl = urlConverter(url)
+
+            if (!convertUrl) {
+
+              // !TODO
+              return
+            }
+
+            const newFavoriteSong = {
+              title,
+              url: convertUrl
+            }
+
+            dataStore.favorites[userId].songs.push(newFavoriteSong)
+           
+            await writeFile(`${__dirname}/data/stores.json`, JSON.stringify(dataStore, undefined, 2))
 
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: 'hello world',
+                content: newFavoriteSong,
               },
             });
           } catch (err) {
