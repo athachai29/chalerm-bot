@@ -103,18 +103,15 @@ app.post('/api/interactions', async (req, res) => {
             const options = data['options'];
             const [url, title] = options;
             const userId = member.user.id;
-            const favourite = dataStore.favorites[userId]
-            if (!favourite) {
-              //
-              return
-            }
-
             const convertUrl = urlConverter(url)
 
             if (!convertUrl) {
-
-              // !TODO
-              return
+              return res.send({
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: {
+                  content: 'cannot convert url to add a new favorite songs',
+                },
+              })
             }
 
             const newFavoriteSong = {
