@@ -82,7 +82,7 @@ app.post('/api/interactions', async (req, res) => {
             }
 
             // 3. convert url for ready to play
-            const userFavSongsConverted = userFavSongs?.songs?.map((item) => `/play ${item.url}`);
+            const userFavSongsConverted = userFavSongs?.songs?.map((item) => `/play ${item.url} \t title: ${item.id}`);
             if (!userFavSongsConverted?.length) {
               return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -138,7 +138,7 @@ app.post('/api/interactions', async (req, res) => {
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: `@${member.user.global_name} /play ${convertUrl}`,
+                content: `/play ${convertUrl}`,
               },
             });
           } catch (err) {
@@ -153,6 +153,25 @@ app.post('/api/interactions', async (req, res) => {
           }
 
         case InteractType.DEL:
+          const options = data['options'];
+          const [id] = options;
+          const json = await readFile(`${__dirname}/data/stores.json`);
+          const dataStore = JSON.parse(json);
+          const userId = member.user.id;
+          if (!dataStore.favorites[userId]) {
+            return res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content: `user ${member.user.global_name} doesn't exist favorite song, could you please add new favorite`,
+              },
+            });
+          }
+
+ 
+
+          dataStore.favorites[userId].songs.filter((song) => song.id !== id)
+
+          await writeFile(`${__dirname}/data/stores.json`, JSON.stringify(dataStore, undefined, 2));
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
@@ -160,7 +179,7 @@ app.post('/api/interactions', async (req, res) => {
             },
           });
         default:
-          res.send({
+         return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
               content: `doesn't support this commands`,
