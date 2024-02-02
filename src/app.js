@@ -169,10 +169,11 @@ app.post('/api/interactions', async (req, res) => {
                 },
               });
             }
-            
+
             const song = dataStore.favorites[userId]?.songs?.find((song) => song.id === id.value);
 
             const index = dataStore.favorites[userId]?.songs?.findIndex((song) => song.id !== id.value);
+
             dataStore.favorites[userId].songs.splice(index, 1);
 
             await writeFile(`${__dirname}/data/stores.json`, JSON.stringify(dataStore, undefined, 2));
