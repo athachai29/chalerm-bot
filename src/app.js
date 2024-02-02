@@ -5,6 +5,7 @@ import { verifyDiscordRequest, urlConverter } from './utils.js';
 import { favoriteOurSongs } from './fav-songs.js';
 import { readFile, writeFile } from 'fs/promises';
 import { InteractType } from './enum.js';
+import dataStore from './data/stores.json'
 
 // Create an express app
 const app = express();
@@ -96,7 +97,7 @@ app.post('/api/interactions', async (req, res) => {
             const json = await readFile(`${__dirname}/src/data/stores.json`);
             const favorites = JSON.parse(json);
 
-            console.log(favorites, data);
+            console.log(favorites, dataStore, data);
 
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -105,6 +106,8 @@ app.post('/api/interactions', async (req, res) => {
               },
             });
           } catch (err) {
+            console.error(err);
+            
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
