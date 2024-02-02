@@ -51,3 +51,27 @@ export async function InstallGlobalCommands(appId, commands) {
     console.error(err);
   }
 }
+
+export function UrlConverter(url) {
+  // Extract video ID from the input URL
+  let videoId = undefined;
+  const regex1 = /youtu\.be\/([a-zA-Z0-9_-]+)/;
+  const regex2 = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
+
+  if (regex1.test(url)) {
+    videoId = url.match(regex1)?.[1];
+  }
+
+  if (regex2.test(url)) {
+    videoId = url.match(regex2)?.[1];
+  }
+
+  if (!videoId) {
+    return null;
+  }
+
+  // Construct the desired URL format
+  const convertedUrl = `https://play.laibaht.ovh/watch?v=${videoId}`;
+  
+  return convertedUrl;
+}

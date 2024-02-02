@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { InteractionType, InteractionResponseType } from "discord-interactions";
-import { VerifyDiscordRequest } from "./utils.js";
+import { VerifyDiscordRequest, UrlConverter } from "./utils.js";
 import favSongs from './fav-songs.json'
 
 // Create an express app
@@ -66,10 +66,20 @@ app.post("/api/interactions", async function (req, res) {
         case "fav":
           // 1. get user id
           const userId = member.user.id; // not sure
+          console.log('userId', userId);
           // 2. get fav songs from favSongs for that user
           const userFavSongs = favSongs.find(item => item.id === userId);
           // 3. convert url for ready to play
+          const userFavSongsConverted = userFavSongs.songs.map(url => {
+            return `/play ${UrlConverter(url)}`;
+          });
           // 4. return a list of fav song
+          return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: userFavSongsConverted.join('\n'),
+            },
+          });
         default:
           res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

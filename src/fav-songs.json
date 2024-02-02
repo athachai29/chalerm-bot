@@ -1,4 +1,4 @@
-[
+export default [
   {
     "userId": "643244907615485955",
     "name": "pele",
