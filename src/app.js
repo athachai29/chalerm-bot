@@ -169,14 +169,16 @@ app.post('/api/interactions', async (req, res) => {
                 },
               });
             }
-            const song = dataStore.favorites[userId].songs.find((song) => song.id === id);
-            dataStore.favorites[userId].songs.filter((song) => song.id !== id);
+            const song = dataStore.favorites[userId]?.songs?.find((song) => song.id === id);
+
+            const songs = dataStore.favorites[userId]?.songs?.filter((song) => song.id !== id);
+            dataStore.favorites[userId].song = songs;
 
             await writeFile(`${__dirname}/data/stores.json`, JSON.stringify(dataStore, undefined, 2));
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: `delete ${song?.title || id}`,
+                content: `delete ${song?.title || id} successfully`,
               },
             });
           } catch (err) {
