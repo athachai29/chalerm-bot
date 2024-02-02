@@ -93,11 +93,11 @@ app.post('/api/interactions', async (req, res) => {
 
         case InteractType.ADD:
           try {
-            console.log(import.meta.url);
-            const json = await readFile(`${__dirname}/src/data/stores.json`);
-            const favorites = JSON.parse(json);
+            console.log(new URL(import.meta.url).pathname);
+            // const json = await readFile(`${__dirname}/src/data/stores.json`);
+            // const favorites = JSON.parse(json);
 
-            console.log(favorites, data);
+            console.log(data);
 
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
