@@ -82,7 +82,9 @@ app.post('/api/interactions', async (req, res) => {
             }
 
             // 3. convert url for ready to play
-            const userFavSongsConverted = userFavSongs?.songs?.map((item) => `/play ${item.url} \t title: ${item.id}`);
+            const userFavSongsConverted = userFavSongs?.songs?.map(
+              (item) => `/play ${item.url} \t title: ${item.title} \t id: ${item.id}`,
+            );
             if (!userFavSongsConverted?.length) {
               return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -154,7 +156,6 @@ app.post('/api/interactions', async (req, res) => {
 
         case InteractType.DEL:
           try {
-            
             const options = data['options'];
             const [id] = options;
             const json = await readFile(`${__dirname}/data/stores.json`);
@@ -168,14 +169,14 @@ app.post('/api/interactions', async (req, res) => {
                 },
               });
             }
-  
+            const song = dataStore.favorites[userId].songs.find((song) => song.id === id);
             dataStore.favorites[userId].songs.filter((song) => song.id !== id);
-  
+
             await writeFile(`${__dirname}/data/stores.json`, JSON.stringify(dataStore, undefined, 2));
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: '',
+                content: `delete ${song?.title || id}`,
               },
             });
           } catch (err) {
@@ -185,7 +186,6 @@ app.post('/api/interactions', async (req, res) => {
                 content: `bad request for delete favorite songs,please contact ppppp313 or _jiw`,
               },
             });
-            
           }
         default:
           return res.send({
