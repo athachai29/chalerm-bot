@@ -17,10 +17,10 @@ const CONVERT_URL_COMMAND = {
 
 const MY_FAVORITE_COMMAND = {
   name: 'fav',
-  description: 'Convert a URL to a manybaht link',
+  description: 'List of your favorite songs',
   type: 1,
 }
 
-const ALL_COMMANDS = [CONVERT_URL_COMMAND];
+const ALL_COMMANDS = [CONVERT_URL_COMMAND, MY_FAVORITE_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

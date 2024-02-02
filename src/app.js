@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { InteractionType, InteractionResponseType } from "discord-interactions";
 import { VerifyDiscordRequest } from "./utils.js";
+import favSongs from './fav-songs.json'
 
 // Create an express app
 const app = express();
@@ -19,7 +20,7 @@ app.get("/", (req, res) => {
  */
 app.post("/api/interactions", async function (req, res) {
   // Interaction type and data
-  const { type, data } = req.body;
+  const { type, data, member } = req.body;
 
   switch (type) {
     case InteractionType.PING:
@@ -62,6 +63,13 @@ app.post("/api/interactions", async function (req, res) {
               content: `/play ${convertedUrl}`,
             },
           });
+        case "fav":
+          // 1. get user id
+          const userId = member.user.id; // not sure
+          // 2. get fav songs from favSongs for that user
+          const userFavSongs = favSongs.find(item => item.id === userId);
+          // 3. convert url for ready to play
+          // 4. return a list of fav song
         default:
           res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
