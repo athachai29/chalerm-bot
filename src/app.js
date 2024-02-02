@@ -67,7 +67,8 @@ app.post("/api/interactions", async function (req, res) {
           });
         case "fav":
           // 1. get user id
-          const userId = member.user.id; // not sure
+          const userId = member.user.id;
+
           // 2. get fav songs from favSongs for that user
           const userFavSongs = favoriteOurSongs.get(userId);
           if (!userFavSongs) {
