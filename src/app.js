@@ -5,6 +5,8 @@ import { verifyDiscordRequest, urlConverter } from './utils.js';
 import { favoriteOurSongs } from './fav-songs.js';
 import { readFile, writeFile } from 'fs/promises';
 import { InteractType } from './enum.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 // Create an express app
 const app = express();
@@ -29,7 +31,7 @@ app.get('/health', (_, res) => {
 app.post('/api/interactions', async (req, res) => {
   // Interaction type and data
   const { type, data, member } = req.body;
-  console.log(data, type)
+  console.log(data, type);
 
   switch (type) {
     case InteractionType.PING:
@@ -40,7 +42,7 @@ app.post('/api/interactions', async (req, res) => {
         case InteractType.URL:
           const url = data['options'][0]['value'];
 
-          const videoUrl = urlConverter(url)
+          const videoUrl = urlConverter(url);
           if (!videoUrl) {
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -93,16 +95,19 @@ app.post('/api/interactions', async (req, res) => {
 
         case InteractType.ADD:
           try {
-            console.log('hello world: ',new URL(import.meta.url));
+            console.log('hello world: ', new URL(import.meta.url));
+
+            const __filename = fileURLToPath(import.meta.url);
+            const __dirname = dirname(__filename);
             // const json = await readFile(`${__dirname}/src/data/stores.json`);
             // const favorites = JSON.parse(json);
 
-            console.log(data);
+            console.log(data, __dirname);
 
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: "hello world",
+                content: 'hello world',
               },
             });
           } catch (err) {
