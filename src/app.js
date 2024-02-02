@@ -63,11 +63,15 @@ app.post('/api/interactions', async (req, res) => {
             },
           });
         case InteractType.FAV:
-          // 1. get user id
+          try {
+            const json = await readFile(`${__dirname}/data/stores.json`);
+            const dataStore = JSON.parse(json);
+
+              // 1. get user id
           const userId = member.user.id;
 
           // 2. get fav songs from favSongs for that user
-          const userFavSongs = favoriteOurSongs.get(userId);
+          const userFavSongs = dataStore.favorites[userId];
           if (!userFavSongs) {
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -78,7 +82,7 @@ app.post('/api/interactions', async (req, res) => {
           }
 
           // 3. convert url for ready to play
-          const userFavSongsConverted = userFavSongs?.songs?.map((item) => `/play ${urlConverter(item.url)}`);
+          const userFavSongsConverted = userFavSongs?.songs?.map((item) => item.url);
           if (!userFavSongsConverted?.length) {
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -95,6 +99,16 @@ app.post('/api/interactions', async (req, res) => {
               content: userFavSongsConverted.join('\n'),
             },
           });
+          } catch (err) {
+            console.error(err)
+            return res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content: "got some problem for get favorites",
+              },
+            })
+          }
+        
 
         case InteractType.ADD:
           try {
