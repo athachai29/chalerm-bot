@@ -1,8 +1,10 @@
-import "dotenv/config";
-import express from "express";
-import { InteractionType, InteractionResponseType } from "discord-interactions";
-import { verifyDiscordRequest, urlConverter } from "./utils.js";
-import { favoriteOurSongs } from "./fav-songs.js";
+import 'dotenv/config';
+import express from 'express';
+import { InteractionType, InteractionResponseType } from 'discord-interactions';
+import { verifyDiscordRequest, urlConverter } from './utils.js';
+import { favoriteOurSongs } from './fav-songs.js';
+import { readFile, writeFile } from 'fs/promises';
+import { InteractType } from './enum.js';
 
 const listMes = [];
 
@@ -13,14 +15,20 @@ const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 app.use(express.json({ verify: verifyDiscordRequest(process.env.PUBLIC_KEY) }));
 
-app.get("/", (req, res) => {
-  res.send("Server is up and running!");
+app.get('/', (_, res) => {
+  res.send('Server is up and running!');
+});
+
+app.get('/health', (_, res) => {
+  res.send({
+    version: process.env.npm_package_version,
+  });
 });
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  */
-app.post("/api/interactions", async function (req, res) {
+app.post('/api/interactions', async (req, res) => {
   // Interaction type and data
   const { type, data, member } = req.body;
 
@@ -30,8 +38,8 @@ app.post("/api/interactions", async function (req, res) {
     case InteractionType.APPLICATION_COMMAND:
       const { name } = data;
       switch (name) {
-        case "url":
-          const url = data["options"][0]["value"];
+        case InteractType.URL:
+          const url = data['options'][0]['value'];
 
           // Extract video ID from the input URL
           let videoId = undefined;
@@ -65,7 +73,7 @@ app.post("/api/interactions", async function (req, res) {
               content: `/play ${convertedUrl}`,
             },
           });
-        case "fav":
+        case InteractType.FAV:
           // 1. get user id
           const userId = member.user.id; // not sure
           // 2. get fav songs from favSongs for that user
@@ -74,22 +82,18 @@ app.post("/api/interactions", async function (req, res) {
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content:
-                  "your account doesn't setup for favorite song, please contact ppppp313 or _jiw",
+                content: "your account doesn't setup for favorite song, please contact ppppp313 or _jiw",
               },
             });
           }
 
           // 3. convert url for ready to play
-          const userFavSongsConverted = userFavSongs?.songs?.map(
-            (item) => `/play ${urlConverter(item.url)}`
-          );
+          const userFavSongsConverted = userFavSongs?.songs?.map((item) => `/play ${urlConverter(item.url)}`);
           if (!userFavSongsConverted?.length) {
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content:
-                  "favorite songs is not found, please contact ppppp313 or _jiw",
+                content: 'favorite songs is not found, please contact ppppp313 or _jiw',
               },
             });
           }
@@ -98,17 +102,38 @@ app.post("/api/interactions", async function (req, res) {
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: userFavSongsConverted.join("\n"),
+              content: userFavSongsConverted.join('\n'),
             },
           });
 
-        case "list":
-          listMes.push(member.user.id);
+        case InteractType.ADD:
+          try {
+            listMes.push(member.user.id);
+            const json = await readFile('./favorites/favorites.json');
+            const favorites = JSON.parse(json);
 
+            console.log(favorites, data);
+
+            return res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content: listMes.join('\n'),
+              },
+            });
+          } catch (err) {
+            return res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content: 'cannot add new favorite song, please check args',
+              },
+            });
+          }
+
+        case InteractType.DEL:
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: listMes.join("\n"),
+              content: '',
             },
           });
         default:
@@ -131,5 +156,5 @@ app.post("/api/interactions", async function (req, res) {
 });
 
 app.listen(PORT, () => {
-  console.log("Listening on port", PORT);
+  console.log('Listening on port', PORT);
 });

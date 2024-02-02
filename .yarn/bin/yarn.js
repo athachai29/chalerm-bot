@@ -23,7 +23,7 @@ if (majorVer < 4) {
   // `lib/cli` may be `lib/cli/index.js` or `lib/cli.js` depending on the build.
   var cli = require(__dirname + '/../lib/cli');
   if (!cli.autoRun) {
-    cli.default().catch(function(error) {
+    cli.default().catch(function (error) {
       console.error(error.stack || error.message || error);
       process.exitCode = 1;
     });
