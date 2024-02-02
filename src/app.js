@@ -103,7 +103,7 @@ app.post('/api/interactions', async (req, res) => {
             const options = data['options'];
             const [url, title] = options;
             const userId = member.user.id;
-            const convertUrl = urlConverter(url)
+            const convertUrl = urlConverter(url.value)
 
             if (!convertUrl) {
               return res.send({
@@ -115,7 +115,7 @@ app.post('/api/interactions', async (req, res) => {
             }
 
             const newFavoriteSong = {
-              title,
+              title: title.value,
               url: convertUrl
             }
 
