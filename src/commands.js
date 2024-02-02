@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { InstallGlobalCommands } from './utils.js';
+import { installGlobalCommands } from './utils.js';
 
 const CONVERT_URL_COMMAND = {
   name: 'url',
@@ -21,6 +21,19 @@ const MY_FAVORITE_COMMAND = {
   type: 1,
 }
 
-const ALL_COMMANDS = [CONVERT_URL_COMMAND, MY_FAVORITE_COMMAND];
 
-InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);
+const ADD_FAV_COMMAND = {
+  name: 'add',
+  description: 'add favourite your favorite songs',
+  type: 1,
+}
+
+const DEL_FAV_COMMAND = {
+   name: 'del',
+  description: 'add favourite your favorite songs',
+  type: 1,
+}
+
+const ALL_COMMANDS = [CONVERT_URL_COMMAND, MY_FAVORITE_COMMAND, MY_LIST_COMMAND];
+
+installGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

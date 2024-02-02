@@ -4,12 +4,14 @@ import { InteractionType, InteractionResponseType } from "discord-interactions";
 import { verifyDiscordRequest, urlConverter } from "./utils.js";
 import { favoriteOurSongs } from "./fav-songs.js";
 
+const listMes = [];
+
 // Create an express app
 const app = express();
 // Get port, or default to 3000
 const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
-app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
+app.use(express.json({ verify: verifyDiscordRequest(process.env.PUBLIC_KEY) }));
 
 app.get("/", (req, res) => {
   res.send("Server is up and running!");
@@ -69,22 +71,44 @@ app.post("/api/interactions", async function (req, res) {
           // 2. get fav songs from favSongs for that user
           const userFavSongs = favoriteOurSongs.get(userId);
           if (!userFavSongs) {
-           return res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: "your account doesn't setup for favorite song, please contact ppppp313 or _jiw",
-            },
-          });
+            return res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content:
+                  "your account doesn't setup for favorite song, please contact ppppp313 or _jiw",
+              },
+            });
           }
+
           // 3. convert url for ready to play
-          const userFavSongsConverted = userFavSongs?.songs?.map((item) => {
-            return `/play ${urlConverter(item.url)}`;
-          });
+          const userFavSongsConverted = userFavSongs?.songs?.map(
+            (item) => `/play ${urlConverter(item.url)}`
+          );
+          if (!userFavSongsConverted?.length) {
+            return res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content:
+                  "favorite songs is not found, please contact ppppp313 or _jiw",
+              },
+            });
+          }
+
           // 4. return a list of fav song
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
               content: userFavSongsConverted.join("\n"),
+            },
+          });
+
+        case "list":
+          listMes.push(member.user.id);
+
+          return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: listMes.join("\n"),
             },
           });
         default:
@@ -106,4 +130,6 @@ app.post("/api/interactions", async function (req, res) {
   }
 });
 
-app.listen(PORT, () => 
+app.listen(PORT, () => {
+  console.log("Listening on port", PORT);
+});
