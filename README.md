@@ -1,9 +1,13 @@
 # CHALERM-BOT
 
-## Update Commands
+## Commands
 
 ```sh
+# For update command
 yarn register
+
+# After pulling code from GitHub on Glitch
+refresh
 ```
 
 ## Contributing
@@ -13,10 +17,3 @@ yarn register
 3. Commit your changes
 4. Push your changes
 5. Tell Pele or Jiw about your changes, and then they will review your changes and update them on Glitch.
-
-## Remark
-
-```sh
-# After pulling code from GitHub on Glitch
-refresh
-```
