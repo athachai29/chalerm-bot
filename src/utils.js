@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import fetch from 'node-fetch';
 import { verifyKey } from 'discord-interactions';
-import { writeFile, access, constants } from 'fs/promises';
+import { writeFile, access } from 'fs/promises';
+import { constants } from 'fs';
 
 /**
  *
@@ -16,6 +17,7 @@ export function verifyDiscordRequest(clientKey) {
     const isValidRequest = verifyKey(buf, signature, timestamp, clientKey);
     if (!isValidRequest) {
       res.status(401).send('Bad request signature');
+
       throw new Error('Bad request signature');
     }
   };
@@ -73,7 +75,10 @@ export async function installGlobalCommands(appId, commands) {
 /**
  *
  * @param {string} url
- * @returns {string}
+ * @returns {{
+ * url: string
+ * videoId: string
+ * }}
  */
 export function urlConverter(url) {
   // Extract video ID from the input URL
@@ -94,7 +99,7 @@ export function urlConverter(url) {
   }
 
   // Construct the desired URL format
-  return `https://play.laibaht.ovh/watch?v=${videoId}`;
+  return { videoId, url: `https://play.laibaht.ovh/watch?v=${videoId}` };
 }
 
 /**
@@ -110,6 +115,6 @@ export async function existDataStore(dbPath) {
 
     await writeFile(dbPath, JSON.stringify({}, undefined, 2));
 
-    console.log('create data store successfully')
+    console.log('create data store successfully');
   }
 }

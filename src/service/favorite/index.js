@@ -1,4 +1,3 @@
-import { v4 as uuidV4 } from 'uuid';
 import { readFile, writeFile } from 'fs/promises';
 import { InteractionResponseType } from 'discord-interactions';
 
@@ -79,7 +78,7 @@ export class FavoriteService {
       const options = data['options'];
       const [{ value: url }, { value: title }] = options;
       const userId = member.user.id;
-      const convertUrl = urlConverter(url);
+      const { convertUrl, videoId } = urlConverter(url);
 
       if (!convertUrl) {
         return res.send({
@@ -92,7 +91,7 @@ export class FavoriteService {
 
       dataStore.favorites[userId].songs.push({
         title,
-        id: uuidV4(),
+        id: videoId,
         url: convertUrl,
       });
 
