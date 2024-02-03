@@ -34,7 +34,7 @@ app.get('/', (_, res) => {
 
 app.get('/health', (_, res) => {
   res.send({
-    version: process.env.npm_package_version,
+    version: "1.0.0",
   });
 });
 

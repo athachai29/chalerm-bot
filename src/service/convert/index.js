@@ -1,3 +1,5 @@
+import { InteractionResponseType } from 'discord-interactions';
+
 import { urlConverter } from '../../utils.js';
 
 export class ConvertURLService {
@@ -5,7 +7,7 @@ export class ConvertURLService {
 
   /**
    *
-   * @param {import('express').Request} data
+   * @param {object} data
    * @param {import('express').Response} res
    * @returns {Promise<void>}
    */

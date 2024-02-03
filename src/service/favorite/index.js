@@ -1,5 +1,5 @@
-import { readFile, writeFile } from 'fs/promises';
 import { InteractionResponseType } from 'discord-interactions';
+import { readFile, writeFile } from 'fs/promises';
 
 import { urlConverter } from '../../utils.js';
 
