@@ -14,7 +14,7 @@ export class ConvertURLService {
   convert(data, res) {
     const [{ value: url }] = data['options'];
 
-    const { videoUrl } = urlConverter(url);
+    const { url: videoUrl } = urlConverter(url);
     if (!videoUrl) {
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
