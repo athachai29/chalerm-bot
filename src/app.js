@@ -1,8 +1,8 @@
 import 'dotenv/config';
-import express from 'express';
+import express, { json } from 'express';
 import { InteractionType, InteractionResponseType } from 'discord-interactions';
 import { verifyDiscordRequest, urlConverter } from './utils.js';
-import { readFile, writeFile } from 'fs/promises';
+import { readFile, writeFile, access, constants } from 'fs/promises';
 import { InteractType } from './enum.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -10,6 +10,13 @@ import { v4 as uuidV4 } from 'uuid';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const dbPath = `${__dirname}/data/stores.json`
+
+// Check if the file exists
+access(dbPath, constants.F_OK).catch(async (err) => {
+ await writeFile(dbPath, JSON.stringify({}, undefined, 2))
+});
 
 // Create an express app
 const app = express();
@@ -64,7 +71,7 @@ app.post('/api/interactions', async (req, res) => {
           });
         case InteractType.FAV:
           try {
-            const json = await readFile(`${__dirname}/data/stores.json`);
+            const json = await readFile(dbPath);
             const dataStore = JSON.parse(json);
 
             // 1. get user id
@@ -113,7 +120,7 @@ app.post('/api/interactions', async (req, res) => {
 
         case InteractType.ADD:
           try {
-            const json = await readFile(`${__dirname}/data/stores.json`);
+            const json = await readFile(dbPath);
             const dataStore = JSON.parse(json);
             const options = data['options'];
             const [url, title] = options;
@@ -135,7 +142,7 @@ app.post('/api/interactions', async (req, res) => {
               url: convertUrl,
             });
 
-            await writeFile(`${__dirname}/data/stores.json`, JSON.stringify(dataStore, undefined, 2));
+            await writeFile(dbPath, JSON.stringify(dataStore, undefined, 2));
 
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -172,9 +179,9 @@ app.post('/api/interactions', async (req, res) => {
 
             const song = dataStore.favorites[userId]?.songs?.find((song) => song.id === id.value);
 
-            const index = dataStore.favorites[userId]?.songs?.findIndex((song) => song.id === id.value);
+            const data = dataStore.favorites[userId]?.songs?.filter((song) => song.id !== id.value);
 
-            dataStore.favorites[userId].songs.splice(index, 1);
+            dataStore.favorites[userId].songs = data;
 
             await writeFile(`${__dirname}/data/stores.json`, JSON.stringify(dataStore, undefined, 2));
 
