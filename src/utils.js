@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import fetch from 'node-fetch';
 import { verifyKey } from 'discord-interactions';
+import { writeFile, access, constants } from 'fs/promises';
 
 /**
  *
@@ -94,4 +95,21 @@ export function urlConverter(url) {
 
   // Construct the desired URL format
   return `https://play.laibaht.ovh/watch?v=${videoId}`;
+}
+
+/**
+ *
+ * @param {string} dbPath
+ * @returns {Promise<void>}
+ */
+export async function existDataStore(dbPath) {
+  try {
+    await access(dbPath, constants.F_OK);
+  } catch (err) {
+    console.error(JSON.stringify(err, undefined, 2));
+
+    await writeFile(dbPath, JSON.stringify({}, undefined, 2));
+
+    console.log('create data store successfully')
+  }
 }
