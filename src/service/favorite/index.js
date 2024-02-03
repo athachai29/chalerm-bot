@@ -89,11 +89,26 @@ export class FavoriteService {
         });
       }
 
-      dataStore.favorites[userId].songs.push({
-        title,
-        id: videoId,
-        url: convertUrl,
-      });
+      if (dataStore.favorites[userId]) {
+        dataStore.favorites[userId].songs.push({
+          title,
+          id: videoId,
+          url: convertUrl,
+        });
+      } else {
+        Object.assign(dataStore.favorites, {
+          userId: {
+            name: member.user.global_name,
+            songs: [
+              {
+                title,
+                id: videoId,
+                url: convertUrl,
+              },
+            ],
+          },
+        });
+      }
 
       await writeFile(dbPath, JSON.stringify(dataStore, undefined, 2));
 
