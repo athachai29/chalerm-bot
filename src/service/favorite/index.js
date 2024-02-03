@@ -51,7 +51,8 @@ export class FavoriteService {
             {
               type: 'rich',
               title: `Lists of favorite songs`,
-              description: 'Y can play song via ManyBath bot! e.g. /play https://play.laibaht.ovh/watch?v=${youtube_id}',
+              description:
+                'Y can play song via ManyBaht bot! e.g. /play https://play.laibaht.ovh/watch?v=${youtube_id}',
               color: 0x00ffff,
               fields: [
                 ...userFavSongs?.songs?.map((song) => ({

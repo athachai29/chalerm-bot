@@ -26,7 +26,22 @@ export class ConvertURLService {
     return res.send({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `/play ${videoUrl}`,
+        content: `<@${userId}> converted successfully`,
+        tts: false,
+        embeds: [
+          {
+            type: 'rich',
+            title: `response to convert youtube url to manyBaht url`,
+            description: 'Y can play song via ManyBaht bot! e.g. /play https://play.laibaht.ovh/watch?v=${youtube_id}',
+            color: 0x00ffff,
+            fields: [
+              {
+                name: `ManyBaht`,
+                value: `/play ${videoUrl}`,
+              },
+            ],
+          },
+        ],
       },
     });
   }
