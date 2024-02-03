@@ -19,7 +19,7 @@ export class FavoriteService {
       const dataStore = JSON.parse(json);
 
       // 1. get user id
-      const userId = member.user.id;
+      const { id: userId } = member.user;
 
       // 2. get fav songs from favSongs for that user
       const userFavSongs = dataStore.favorites[userId];
@@ -27,7 +27,7 @@ export class FavoriteService {
         return res.send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            content: "your account doesn't setup for favorite song, please contact ppppp313 or _jiw",
+            content: "your account doesn't setup for favorite song, please add yours song again!",
           },
         });
       }
@@ -36,7 +36,7 @@ export class FavoriteService {
         return res.send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            content: 'favorite songs is not found, please contact ppppp313 or _jiw',
+            content: 'favorite songs is not found, please add yours song again!',
           },
         });
       }
@@ -51,12 +51,12 @@ export class FavoriteService {
             {
               type: 'rich',
               title: `Lists of favorite songs`,
-              description: '',
+              description: 'Y can play song via ManyBath bot! e.g. /play https://play.laibaht.ovh/watch?v=${youtube_id}',
               color: 0x00ffff,
               fields: [
                 ...userFavSongs?.songs?.map((song) => ({
                   name: `title: ${song.title}, \t ID: ${song.id}`,
-                  value: `${song.url}`,
+                  value: `/play ${song.url}`,
                 })),
               ],
             },
@@ -84,11 +84,13 @@ export class FavoriteService {
    */
   async addFavoriteSong(dbPath, member, data, res) {
     try {
+      const { id: userId } = member.user;
+
       const json = await readFile(dbPath);
       const dataStore = JSON.parse(json);
+
       const options = data['options'];
       const [{ value: url }, { value: title }] = options;
-      const userId = member.user.id;
       const { url: convertUrl, videoId } = urlConverter(url);
 
       if (!convertUrl) {
@@ -127,6 +129,21 @@ export class FavoriteService {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           content: `<@${userId}> /play ${convertUrl}`,
+          tts: false,
+          embeds: [
+            {
+              type: 'rich',
+              title: `Your added song`,
+              description: '',
+              color: 0x00ffff,
+              fields: [
+                {
+                  name: `title: ${title}, \t ID: ${videoId}`,
+                  value: `/play ${convertUrl}`,
+                },
+              ],
+            },
+          ],
         },
       });
     } catch (err) {
@@ -151,16 +168,18 @@ export class FavoriteService {
    */
   async deleteFavoriteSong(dbPath, member, data, res) {
     try {
+      const { id: userId, global_name } = member.user;
+
       const options = data['options'];
       const [{ value: songId }] = options;
       const json = await readFile(dbPath);
       const dataStore = JSON.parse(json);
-      const userId = member.user.id;
+
       if (!dataStore.favorites[userId] || !dataStore.favorites[userId]?.songs?.length) {
         return res.send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            content: `user ${member.user.global_name} doesn't exist favorite song, could you please add new favorite`,
+            content: `user ${global_name} doesn't exist favorite song, could you please add new favorite`,
           },
         });
       }
