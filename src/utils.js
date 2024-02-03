@@ -113,7 +113,7 @@ export async function existDataStore(dbPath) {
   } catch (err) {
     console.error(JSON.stringify(err, undefined, 2));
 
-    await writeFile(dbPath, JSON.stringify({}, undefined, 2));
+    await writeFile(dbPath, JSON.stringify({ favorites: {} }, undefined, 2));
 
     console.log('create data store successfully');
   }

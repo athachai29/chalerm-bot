@@ -89,8 +89,8 @@ export class FavoriteService {
         });
       }
 
-      if (dataStore.favorites[userId]) {
-        dataStore.favorites[userId].songs.push({
+      if (dataStore?.favorites?.[userId]) {
+        dataStore?.favorites?.[userId].songs.push({
           title,
           id: videoId,
           url: convertUrl,
