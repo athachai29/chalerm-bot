@@ -52,7 +52,7 @@ app.post('/api/interactions', async (req, res) => {
       const { name } = data;
       switch (name) {
         case InteractType.URL:
-          return convertService.convert(data, res);
+          return convertService.convert(data, member, res);
         case InteractType.FAV:
           return favoriteService.favorite(dbPath, member, res);
         case InteractType.ADD:

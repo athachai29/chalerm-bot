@@ -8,10 +8,12 @@ export class ConvertURLService {
   /**
    *
    * @param {object} data
+   * @param {object} member
    * @param {import('express').Response} res
    * @returns {Promise<void>}
    */
-  convert(data, res) {
+  convert(data, member, res) {
+    const { id: userId } = member.user;
     const [{ value: url }] = data['options'];
 
     const { url: videoUrl } = urlConverter(url);
