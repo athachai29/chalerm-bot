@@ -97,7 +97,7 @@ export class FavoriteService {
         });
       } else {
         Object.assign(dataStore.favorites, {
-          userId: {
+          [userId]: {
             name: member.user.global_name,
             songs: [
               {
