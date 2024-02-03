@@ -32,11 +32,7 @@ export class FavoriteService {
         });
       }
 
-      // 3. convert url for ready to play
-      const userFavSongsConverted = userFavSongs?.songs?.map(
-        (item) => `/play ${item.url} \t title: ${item.title} \t id: ${item.id}`,
-      );
-      if (!userFavSongsConverted?.length) {
+      if (!userFavSongs?.songs?.length) {
         return res.send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
@@ -49,7 +45,22 @@ export class FavoriteService {
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: userFavSongsConverted.join('\n'),
+          content: `Hey <@!${userId}>! This of list your favorite songs:`,
+          tts: false,
+          embeds: [
+            {
+              type: 'rich',
+              title: `Lists of favorite songs`,
+              description: '',
+              color: 0x00ffff,
+              fields: [
+                ...userFavSongs?.songs?.map((song) => ({
+                  name: `title: ${song.title}, \t ID: ${song.id}`,
+                  value: `${song.url}`,
+                })),
+              ],
+            },
+          ],
         },
       });
     } catch (err) {
@@ -71,7 +82,7 @@ export class FavoriteService {
    * @param {import('express').Response} res
    * @returns {Promise<void>}
    */
-  async add(dbPath, member, data, res) {
+  async addFavoriteSong(dbPath, member, data, res) {
     try {
       const json = await readFile(dbPath);
       const dataStore = JSON.parse(json);
@@ -133,12 +144,12 @@ export class FavoriteService {
   /**
    *
    * @param {string} dbPath
-   * @param {member} member
-   * @param {data} data
+   * @param {object} member
+   * @param {object} data
    * @param {import('express').Response} res
    * @returns {Promise<void>}
    */
-  async del(dbPath, member, data, res) {
+  async deleteFavoriteSong(dbPath, member, data, res) {
     try {
       const options = data['options'];
       const [{ value: songId }] = options;
@@ -155,9 +166,7 @@ export class FavoriteService {
       }
 
       const song = dataStore.favorites[userId]?.songs?.find((song) => song.id === songId);
-
       const leastSongs = dataStore.favorites[userId]?.songs?.filter((song) => song.id !== songId);
-
       dataStore.favorites[userId].songs = leastSongs;
 
       await writeFile(dbPath, JSON.stringify(dataStore, undefined, 2));

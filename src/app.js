@@ -56,9 +56,9 @@ app.post('/api/interactions', async (req, res) => {
         case InteractType.FAV:
           return favoriteService.favorite(dbPath, member, res);
         case InteractType.ADD:
-          return favoriteService.add(dbPath, member, data, res);
+          return favoriteService.addFavoriteSong(dbPath, member, data, res);
         case InteractType.DEL:
-          return favoriteService.del(dbPath, member, data, res);
+          return favoriteService.deleteFavoriteSong(dbPath, member, data, res);
         default:
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
