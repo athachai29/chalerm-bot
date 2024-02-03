@@ -78,7 +78,7 @@ export class FavoriteService {
       const options = data['options'];
       const [{ value: url }, { value: title }] = options;
       const userId = member.user.id;
-      const { convertUrl, videoId } = urlConverter(url);
+      const { url: convertUrl, videoId } = urlConverter(url);
 
       if (!convertUrl) {
         return res.send({
