@@ -10,12 +10,14 @@ export class SearchService {
     /**
      *
      * @param {object} data
+    * @param {member} member
      * @param {import('express').Response} res
      * @returns {Promise<void>}
      */
-    async search(data, res) {
+    async search(data, member,res) {
         try {
             const [{ value: query }] = data['options'];
+            const { id: userId } = member.user;
 
             const videos = await searchVideos(query);
 
@@ -29,21 +31,22 @@ export class SearchService {
             return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                 data: {
-                    content: '<@${userId}> search result',
+                    content: `<@${userId}> search result`,
                     tts: false,
-                    embeds: {
-                        type: 'rich',
-                        title: `results your youtube search`,
-                        description: '',
-                        color: 0x00ffff,
-                        fields: [
-                            ...fields,
-                            {
-                                name: '',
-                                value: 'any more...'
-                            }
-                        ],
-                    },
+                    embeds: [
+                        {
+                            type: 'rich',
+                            title: `results your youtube search`,
+                            description: '',
+                            color: 0x00ffff,
+                            fields: [
+                                ...fields,
+                                {
+                                    name: '',
+                                    value: 'any more...'
+                                }
+                            ],
+                        }],
                 },
             });
         } catch (err) {
