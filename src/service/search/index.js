@@ -24,8 +24,12 @@ export class SearchService {
             const embeds = videos.map((video) => {
                 return ({
                     type: 'rich',
-                    title: video.title,
-                    description: `/play https://play.laibaht.ovh/watch?v=${video.videoId}`,
+                    author: {
+                        name: video.title,
+                        url: `https://www.youtube.com/watch?v=${video.videoId}`
+                    },
+                    title: `/play https://play.laibaht.ovh/watch?v=${video.videoId}`,
+                    description: video.description,
                     timestamp: new Date().toISOString(),
                     thumbnail: {
                         url: video.thumbnailURL
