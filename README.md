@@ -17,3 +17,11 @@ refresh
 3. Commit your changes
 4. Push your changes
 5. Tell [@athachai29](https://github.com/athachai29) or [@pitsanujiw](https://github.com/pitsanujiw) about your changes, and then they will review your changes and update them on Glitch.
+
+## Example for stores.json file
+
+```json
+{
+    "favorites": {}
+}
+```
