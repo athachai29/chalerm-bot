@@ -9,6 +9,7 @@ import { dirname } from 'path';
 
 import { FavoriteService } from './service/favorite/index.js';
 import { ConvertURLService } from './service/convert/index.js';
+import { SearchService } from './service/search/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,6 +21,8 @@ existDataStore(dbPath);
 const convertService = new ConvertURLService();
 
 const favoriteService = new FavoriteService();
+
+const searchService = new SearchService();
 
 // Create an express app
 const app = express();
@@ -59,6 +62,8 @@ app.post('/api/interactions', async (req, res) => {
           return favoriteService.addFavoriteSong(dbPath, member, data, res);
         case InteractType.DEL:
           return favoriteService.deleteFavoriteSong(dbPath, member, data, res);
+        case InteractType.SEARCH:
+          return searchService.search(data, res);
         default:
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

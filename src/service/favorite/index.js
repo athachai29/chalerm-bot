@@ -3,6 +3,8 @@ import { readFile, writeFile } from 'fs/promises';
 
 import { urlConverter } from '../../utils.js';
 
+import { getVideoInfo } from '../../youtube.js';
+
 export class FavoriteService {
   constructor() {}
 
@@ -91,8 +93,10 @@ export class FavoriteService {
       const dataStore = JSON.parse(json);
 
       const options = data['options'];
-      const [{ value: url }, { value: title }] = options;
+      const [{ value: url }] = options;
       const { url: convertUrl, videoId } = urlConverter(url);
+
+      const videoTitle = await getVideoInfo(videoId);
 
       if (!convertUrl) {
         return res.send({
@@ -105,7 +109,7 @@ export class FavoriteService {
 
       if (dataStore?.favorites?.[userId]) {
         dataStore?.favorites?.[userId].songs.push({
-          title,
+          title: videoTitle,
           id: videoId,
           url: convertUrl,
         });
@@ -115,7 +119,7 @@ export class FavoriteService {
             name: member.user.global_name,
             songs: [
               {
-                title,
+                title: videoTitle,
                 id: videoId,
                 url: convertUrl,
               },
@@ -139,7 +143,7 @@ export class FavoriteService {
               color: 0x00ffff,
               fields: [
                 {
-                  name: `title: ${title}, \t ID: ${videoId}`,
+                  name: `title: ${videoTitle}, \t ID: ${videoId}`,
                   value: `/play ${convertUrl}`,
                 },
               ],

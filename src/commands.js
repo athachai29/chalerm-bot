@@ -32,12 +32,6 @@ const ADD_FAV_COMMAND = {
       description: 'URL to convert',
       required: true,
     },
-    {
-      type: 3,
-      name: InteractParamType.TITLE,
-      description: 'Title to convert',
-      required: true,
-    },
   ],
   type: 1,
 };
@@ -56,6 +50,20 @@ const DEL_FAV_COMMAND = {
   type: 1,
 };
 
-const ALL_COMMANDS = [CONVERT_URL_COMMAND, MY_FAVORITE_COMMAND, ADD_FAV_COMMAND, DEL_FAV_COMMAND];
+const SEARCH_COMMAND = {
+  name: InteractType.SEARCH,
+  description: 'search for a song',
+  options: [
+    {
+      type: 3,
+      name: InteractParamType.QUERY,
+      description: 'search query',
+      required: true,
+    },
+  ],
+  type: 1,
+};
+
+const ALL_COMMANDS = [CONVERT_URL_COMMAND, MY_FAVORITE_COMMAND, ADD_FAV_COMMAND, DEL_FAV_COMMAND, SEARCH_COMMAND];
 
 installGlobalCommands(process.env.APP_ID, ALL_COMMANDS);
