@@ -20,7 +20,7 @@ export class SearchService {
             const videos = await searchVideos(query);
 
             const fields = videos.map((video) => {
-                const { url: convertUrl, videoId } = urlConverter(url);
+                const { url: convertUrl, videoId } = urlConverter(video.videoId);
     
                 return ({
                     name:  `${video.title}`,
