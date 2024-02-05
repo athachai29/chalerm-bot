@@ -17,19 +17,29 @@ export class SearchService {
 
             const videos = await searchVideos(query);
 
-            const embeds = videos.map((video) => ({
-                type: 'rich',
-                title: video.title,
-                description: `https://www.youtube.com/watch?v=${video.videoId}`,
-                color: 0x00ffff,
-            }));
+            const fields = videos.map((video) => {
+                const { url: convertUrl, videoId } = urlConverter(url);
+    
+                return ({
+                    name:  `${video.title}`,
+                    value: `/play ${convertUrl}`,
+                })
+            });
 
             return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                 data: {
-                    content: 'search result',
+                    content: '<@${userId}> search result',
                     tts: false,
-                    embeds,
+                    embeds: {
+                        type: 'rich',
+                        title: `results your youtube search`,
+                        description: '',
+                        color: 0x00ffff,
+                        fields: [
+                            ...fields,
+                        ],
+                    },
                 },
             });
         } catch (err) {
