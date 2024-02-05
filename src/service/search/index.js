@@ -19,12 +19,10 @@ export class SearchService {
 
             const videos = await searchVideos(query);
 
-            const fields = videos.map((video) => {
-                const { url: convertUrl, videoId } = urlConverter(video.videoId);
-    
+            const fields = videos.map((video) => {    
                 return ({
                     name:  `${video.title}`,
-                    value: `/play ${convertUrl}`,
+                    value: `/play https://play.laibaht.ovh/watch?v=${video.videoId}`,
                 })
             });
 
