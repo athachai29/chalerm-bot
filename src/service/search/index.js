@@ -26,9 +26,7 @@ export class SearchService {
                     type: 'rich',
                     title: video.title,
                     description: `/play https://play.laibaht.ovh/watch?v=${video.videoId}`,
-                    image: {
-                        url: video.photoURL
-                    },
+                    timestamp: new Date().toISOString(),
                     thumbnail: {
                         url: video.thumbnailURL
                     },
