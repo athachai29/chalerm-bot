@@ -19,9 +19,9 @@ export class SearchService {
 
             const videos = await searchVideos(query);
 
-            const fields = videos.map((video) => {    
+            const fields = videos.slice(0, 23).map((video) => {
                 return ({
-                    name:  `${video.title}`,
+                    name: `${video.title}`,
                     value: `/play https://play.laibaht.ovh/watch?v=${video.videoId}`,
                 })
             });
@@ -38,6 +38,10 @@ export class SearchService {
                         color: 0x00ffff,
                         fields: [
                             ...fields,
+                            {
+                                name: '',
+                                value: 'any more...'
+                            }
                         ],
                     },
                 },
