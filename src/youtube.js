@@ -22,6 +22,8 @@ export async function searchVideos(query) {
   });
 
   return res.data.items.map((item) => ({
+    thumbnailURL: item.snippet.thumbnails.default.url,
+    photoURL: item.snippet.thumbnails.high.url,
     title: item.snippet.title,
     videoId: item.id.videoId,
   }));

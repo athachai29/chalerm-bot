@@ -14,17 +14,24 @@ export class SearchService {
      * @param {import('express').Response} res
      * @returns {Promise<void>}
      */
-    async search(data, member,res) {
+    async search(data, member, res) {
         try {
             const [{ value: query }] = data['options'];
             const { id: userId } = member.user;
 
             const videos = await searchVideos(query);
 
-            const fields = videos.slice(0, 23).map((video) => {
+            const embeds = videos.map((video) => {
                 return ({
-                    name: `${video.title}`,
-                    value: `/play https://play.laibaht.ovh/watch?v=${video.videoId}`,
+                    type: 'rich',
+                    title: video.title,
+                    description: `/play https://play.laibaht.ovh/watch?v=${video.videoId}`,
+                    image: {
+                        url: video.photoURL
+                    },
+                    thumbnail: {
+                        url: video.thumbnailURL
+                    },
                 })
             });
 
@@ -34,19 +41,8 @@ export class SearchService {
                     content: `<@${userId}> search result`,
                     tts: false,
                     embeds: [
-                        {
-                            type: 'rich',
-                            title: `results your youtube search`,
-                            description: '',
-                            color: 0x00ffff,
-                            fields: [
-                                ...fields,
-                                {
-                                    name: '',
-                                    value: 'any more...'
-                                }
-                            ],
-                        }],
+                        ...embeds,
+                    ],
                 },
             });
         } catch (err) {
