@@ -1,5 +1,7 @@
 import { InteractionResponseType } from 'discord-interactions';
 
+import { urlConverter } from '../../utils.js';
+
 import { searchVideos } from '../../youtube.js';
 
 export class SearchService {
