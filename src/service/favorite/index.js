@@ -52,8 +52,6 @@ export class FavoriteService {
             url: `https://www.youtube.com/watch?v=${song.id}`,
           },
           title: `/play https://play.laibaht.ovh/watch?v=${song.id}`,
-          description: 'You can play song via ManyBaht bot! e.g. /play https://play.laibaht.ovh/watch?v=${youtube_id}',
-          color: 0x00ffff,
         });
       });
 
