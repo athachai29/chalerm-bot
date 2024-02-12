@@ -33,6 +33,9 @@ export class SearchService {
                     thumbnail: {
                         url: video.thumbnailURL
                     },
+                    footer: {
+                        text: `Song ID: ${video.videoId}`,
+                    },
                 })
             });
 

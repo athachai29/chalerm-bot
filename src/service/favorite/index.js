@@ -149,15 +149,21 @@ export class FavoriteService {
           embeds: [
             {
               type: 'rich',
-              title: `Your added song`,
-              description: '',
-              color: 0x00ffff,
-              fields: [
-                {
-                  name: `title: ${title}, \t ID: ${videoId}`,
-                  value: `/play ${convertUrl}`,
-                },
-              ],
+              author: {
+                name: title,
+                url: `https://www.youtube.com/watch?v=${videoId}`,
+              },
+              title: `/play ${convertUrl}`,
+              description: description,
+              footer: {
+                text: `Song ID: ${videoId}`,
+              },
+              thumbnail: {
+                url: photoURL,
+              },
+              footer: {
+                text: `Song ID: ${videoId}`,
+              },
             },
           ],
         },
