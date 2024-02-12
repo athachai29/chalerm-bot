@@ -6,7 +6,7 @@ import { urlConverter } from '../../utils.js';
 import { getVideoInfo } from '../../youtube.js';
 
 export class FavoriteService {
-  constructor() {}
+  constructor() { }
 
   /**
    *
@@ -44,25 +44,26 @@ export class FavoriteService {
       }
 
       // 4. return a list of fav song
+      const embeds = userFavSongs?.songs?.map((song) => {
+        return ({
+          type: 'rich',
+          author: {
+            name: song.title,
+            url: `https://www.youtube.com/watch?v=${song.id}`,
+          },
+          title: `/play https://play.laibaht.ovh/watch?v=${song.id}`,
+          description: 'You can play song via ManyBaht bot! e.g. /play https://play.laibaht.ovh/watch?v=${youtube_id}',
+          color: 0x00ffff,
+        });
+      });
+
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           content: `Hey <@!${userId}>! This of list your favorite songs:`,
           tts: false,
           embeds: [
-            {
-              type: 'rich',
-              title: `Lists of favorite songs`,
-              description:
-                'Y can play song via ManyBaht bot! e.g. /play https://play.laibaht.ovh/watch?v=${youtube_id}',
-              color: 0x00ffff,
-              fields: [
-                ...userFavSongs?.songs?.map((song) => ({
-                  name: `title: ${song.title}, \t ID: ${song.id}`,
-                  value: `/play ${song.url}`,
-                })),
-              ],
-            },
+            ...embeds,
           ],
         },
       });
