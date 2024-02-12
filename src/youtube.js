@@ -18,6 +18,8 @@ export async function getVideoInfo(videoId) {
     id: videoId,
   });
 
+  console.log(res.data.items)
+
   return {
     title: res.data.items[0].snippet.title,
     photoURL: res.data.items[0].snippet.thumbnails.high.url,
