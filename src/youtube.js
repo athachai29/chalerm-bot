@@ -25,7 +25,7 @@ export async function searchVideos(query) {
     thumbnailURL: item.snippet.thumbnails.default.url,
     photoURL: item.snippet.thumbnails.high.url,
     title: item.snippet.title,
-    videoId: item.id.videoId,
+    videoId: item.id.videoId || item.id.playlistId,
     description: item.snippet.description,
   }));
 }
