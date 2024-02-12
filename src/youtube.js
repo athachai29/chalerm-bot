@@ -25,7 +25,7 @@ export async function getVideoInfo(videoId) {
   return {
     title: item.snippet.title,
     photoURL: item.snippet.thumbnails.high.url,
-    description: truncateWords(item.snippet.description, 17),
+    description: truncateWords(item.snippet.description, 7),
   };
 }
 

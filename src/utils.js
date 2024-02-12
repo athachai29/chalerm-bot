@@ -133,7 +133,7 @@ export async function existDataStore(dbPath) {
  * @returns {string}
  */
 export function truncateWords(str, wordCount, ending = ' ...') {
-  const words = str.split(' ');
+  const words = str.split('\n');
   if (words.length <= wordCount) return str; // No truncation needed
   return words.slice(0, wordCount).join(' ') + ending;
 }
