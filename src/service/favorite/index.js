@@ -53,7 +53,6 @@ export class FavoriteService {
           },
           title: `/play https://play.laibaht.ovh/watch?v=${song.id}`,
           description: song?.description || 'You can play song via ManyBaht bot! e.g. /play https://play.laibaht.ovh/watch?v=${youtube_id}',
-          timestamp: new Date().toISOString(),
           ...(song?.photoURL && {
             thumbnail: {
               url: song?.photoURL

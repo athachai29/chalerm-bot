@@ -30,7 +30,6 @@ export class SearchService {
                     },
                     title: `/play https://play.laibaht.ovh/watch?v=${video.videoId}`,
                     description: video.description,
-                    timestamp: new Date().toISOString(),
                     thumbnail: {
                         url: video.thumbnailURL
                     },
