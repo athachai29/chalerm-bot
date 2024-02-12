@@ -67,7 +67,7 @@ export class FavoriteService {
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: `Hey <@!${userId}>! This of list your favorite songs:`,
+          content: `Hey <@!${userId}>! This of list your favorite songs`,
           tts: false,
           embeds: [
             ...embeds,
