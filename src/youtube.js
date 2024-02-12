@@ -4,6 +4,13 @@ const youtube = google.youtube('v3');
 
 const apiKey = process.env.YOUTUBE_API_KEY;
 
+const thumbnailRegex = /i.ytimg\.com\/vi\/([a-zA-Z0-9_-]+)/;
+
+/**
+ * 
+ * @param {string} videoId 
+ * @returns {object}
+ */
 export async function getVideoInfo(videoId) {
   const res = await youtube.videos.list({
     key: apiKey,
@@ -11,7 +18,11 @@ export async function getVideoInfo(videoId) {
     id: videoId,
   });
 
-  return res.data.items[0].snippet.title;
+  return {
+    title: res.data.items[0].snippet.title,
+    photoURL: res.data.items[0].snippet.thumbnails.high.url,
+    description: res.data.items[0].snippet.description,
+  };
 }
 
 export async function searchVideos(query) {
@@ -21,11 +32,22 @@ export async function searchVideos(query) {
     q: query,
   });
 
-  return res.data.items.map((item) => ({
+
+  return res.data.items.map((item) => {
+    let videoId = item?.id?.videoId
+    if (!item?.id?.videoId) {
+      const url = item?.snippet.thumbnails.default;
+
+      if (thumbnailRegex.test(url)) {
+        videoId = url.match(thumbnailRegex)?.[1];
+      }
+    }
+    
+    return ({
     thumbnailURL: item.snippet.thumbnails.default.url,
     photoURL: item.snippet.thumbnails.high.url,
     title: item.snippet.title,
-    videoId: item.id.videoId || item.id.playlistId,
+    videoId: videoId,
     description: item.snippet.description,
-  }));
+  })});
 }

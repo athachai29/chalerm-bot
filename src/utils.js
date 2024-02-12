@@ -4,6 +4,10 @@ import { verifyKey } from 'discord-interactions';
 import { writeFile, access } from 'fs/promises';
 import { constants } from 'fs';
 
+const youtubeSharedRegex = /youtu\.be\/([a-zA-Z0-9_-]+)/;
+const youtubeLinkRegex = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
+const moneyBahtPlayRegex = /play\.laibaht\.ovh\/watch\?v=([a-zA-Z0-9_-]+)/;
+
 /**
  *
  * @param {string} clientKey
@@ -83,9 +87,6 @@ export async function installGlobalCommands(appId, commands) {
 export function urlConverter(url) {
   // Extract video ID from the input URL
   let videoId = undefined;
-  const youtubeSharedRegex = /youtu\.be\/([a-zA-Z0-9_-]+)/;
-  const youtubeLinkRegex = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
-  const moneyBahtPlayRegex = /play\.laibaht\.ovh\/watch\?v=([a-zA-Z0-9_-]+)/;
 
   if (youtubeSharedRegex.test(url)) {
     videoId = url.match(youtubeSharedRegex)?.[1];

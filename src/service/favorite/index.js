@@ -52,6 +52,13 @@ export class FavoriteService {
             url: `https://www.youtube.com/watch?v=${song.id}`,
           },
           title: `/play https://play.laibaht.ovh/watch?v=${song.id}`,
+          description: song?.description || 'You can play song via ManyBaht bot! e.g. /play https://play.laibaht.ovh/watch?v=${youtube_id}',
+          color: 0x00ffff,
+          ...(song?.photoURL && {
+            thumbnail: {
+              url: song?.photoURL
+            },
+          }),
         });
       });
 
@@ -94,8 +101,7 @@ export class FavoriteService {
       const options = data['options'];
       const [{ value: url }] = options;
       const { url: convertUrl, videoId } = urlConverter(url);
-
-      const videoTitle = await getVideoInfo(videoId);
+      const { title, photoURL, description } = await getVideoInfo(videoId);
 
       if (!convertUrl) {
         return res.send({
@@ -108,7 +114,9 @@ export class FavoriteService {
 
       if (dataStore?.favorites?.[userId]) {
         dataStore?.favorites?.[userId].songs.push({
-          title: videoTitle,
+          title,
+          photoURL,
+          description,
           id: videoId,
           url: convertUrl,
         });
@@ -118,7 +126,9 @@ export class FavoriteService {
             name: member.user.global_name,
             songs: [
               {
-                title: videoTitle,
+                title,
+                photoURL,
+                description,
                 id: videoId,
                 url: convertUrl,
               },
