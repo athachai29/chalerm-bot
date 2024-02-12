@@ -85,6 +85,7 @@ export function urlConverter(url) {
   let videoId = undefined;
   const youtubeSharedRegex = /youtu\.be\/([a-zA-Z0-9_-]+)/;
   const youtubeLinkRegex = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
+  const moneyBahtPlayRegex = /play\.laibaht\.ovh\/watch\?v=([a-zA-Z0-9_-]+)/;
 
   if (youtubeSharedRegex.test(url)) {
     videoId = url.match(youtubeSharedRegex)?.[1];
@@ -92,6 +93,10 @@ export function urlConverter(url) {
 
   if (youtubeLinkRegex.test(url)) {
     videoId = url.match(youtubeLinkRegex)?.[1];
+  }
+
+  if (moneyBahtPlayRegex.test(url)) {
+    videoId = url;
   }
 
   if (!videoId) {
