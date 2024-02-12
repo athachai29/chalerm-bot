@@ -155,9 +155,6 @@ export class FavoriteService {
               },
               title: `/play ${convertUrl}`,
               description: description,
-              footer: {
-                text: `Song ID: ${videoId}`,
-              },
               thumbnail: {
                 url: photoURL,
               },
