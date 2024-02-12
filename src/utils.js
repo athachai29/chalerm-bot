@@ -97,7 +97,7 @@ export function urlConverter(url) {
   }
 
   if (moneyBahtPlayRegex.test(url)) {
-    videoId = url;
+    videoId = url.match(moneyBahtPlayRegex)?.[1];
   }
 
   if (!videoId) {
