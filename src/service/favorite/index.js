@@ -152,7 +152,7 @@ export class FavoriteService {
               color: 0x00ffff,
               fields: [
                 {
-                  name: `title: ${videoTitle}, \t ID: ${videoId}`,
+                  name: `title: ${title}, \t ID: ${videoId}`,
                   value: `/play ${convertUrl}`,
                 },
               ],
