@@ -18,7 +18,7 @@ export async function getVideoInfo(videoId) {
     id: videoId,
   });
 
-  console.log(res.data.items)
+  console.log(JSON.stringify(res.data.items, undefined, 2))
 
   return {
     title: res.data.items[0].snippet.title,
