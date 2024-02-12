@@ -124,3 +124,16 @@ export async function existDataStore(dbPath) {
     console.log('create data store successfully');
   }
 }
+
+/**
+ * 
+ * @param {*} str 
+ * @param {*} wordCount 
+ * @param {*} ending 
+ * @returns {string}
+ */
+export function truncateWords(str, wordCount, ending = ' ...') {
+  const words = str.split(' ');
+  if (words.length <= wordCount) return str; // No truncation needed
+  return words.slice(0, wordCount).join(' ') + ending;
+}

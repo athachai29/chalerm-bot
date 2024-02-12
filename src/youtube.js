@@ -1,5 +1,7 @@
 import { google } from 'googleapis';
 
+import { truncateWords } from './utils.js';
+
 const youtube = google.youtube('v3');
 
 const apiKey = process.env.YOUTUBE_API_KEY;
@@ -14,7 +16,7 @@ const thumbnailRegex = /i.ytimg\.com\/vi\/([a-zA-Z0-9_-]+)/;
 export async function getVideoInfo(videoId) {
   const res = await youtube.videos.list({
     key: apiKey,
-    part: 'snippet,contentDetails',
+    part: 'snippet',
     id: videoId,
   });
 
@@ -23,7 +25,7 @@ export async function getVideoInfo(videoId) {
   return {
     title: item.snippet.title,
     photoURL: item.snippet.thumbnails.high.url,
-    description: item.snippet.description,
+    description: truncateWords(item.snippet.description, 17),
   };
 }
 
