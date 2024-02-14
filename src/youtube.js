@@ -40,9 +40,8 @@ export async function searchVideos(query) {
   return res.data.items.map((item) => {
     let videoId = item?.id?.videoId
     if (!videoId) {
-      const url = item?.snippet.thumbnails.default;
-      console.log('url', url)
-      
+      const url = item?.snippet?.thumbnails?.default?.url;
+
       if (thumbnailRegex.test(url)) {
         videoId = url.match(thumbnailRegex)?.[1];
       }
