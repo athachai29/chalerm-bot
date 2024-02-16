@@ -46,12 +46,18 @@ export async function searchVideos(query) {
         videoId = url.match(thumbnailRegex)?.[1];
       }
     }
-    
+
+    if (!videoId) {
+      return undefined
+    }
+
     return ({
-    thumbnailURL: item.snippet.thumbnails.default.url,
-    photoURL: item.snippet.thumbnails.high.url,
-    title: item.snippet.title,
-    videoId: videoId,
-    description: item.snippet.description,
-  })});
+      thumbnailURL: item.snippet.thumbnails.default.url,
+      photoURL: item.snippet.thumbnails.high.url,
+      title: item.snippet.title,
+      videoId: videoId,
+      description: item.snippet.description,
+    })
+  })
+    .filter(Boolean);
 }
