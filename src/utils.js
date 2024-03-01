@@ -5,7 +5,7 @@ import { writeFile, access } from 'fs/promises';
 import { constants } from 'fs';
 
 const youtubeSharedRegex = /youtu\.be\/([a-zA-Z0-9_-]+)/;
-const moneyBahtPlayRegex = /play\.laibaht\.ovh\/watch\?v=([a-zA-Z0-9_-]+)/;
+// const moneyBahtPlayRegex = /play\.laibaht\.ovh\/watch\?v=([a-zA-Z0-9_-]+)/;
 
 /**
  *
@@ -88,11 +88,6 @@ export function urlConverter(url) {
     const videoId = url.match(youtubeSharedRegex)?.[1];
 
     return { videoId, url: `https://play.laibaht.ovh/watch?v=${videoId}` }
-  }
-
-  if (moneyBahtPlayRegex.test(url)) {
-    videoId = url.match(moneyBahtPlayRegex)?.[1];
-    return { videoId, url: `https://play.laibaht.ovh/watch?v=${videoId}` };
   }
 
   const urlObj = new URL(url)
