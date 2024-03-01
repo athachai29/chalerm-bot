@@ -105,7 +105,7 @@ export function urlConverter(url) {
     return null
   }
 
-  return { videoId, url: `https://play.laibaht.ovh/watch?${urlObj.search}` };
+  return { videoId, url: `https://play.laibaht.ovh/watch${urlObj.search}` };
 }
 
 /**
