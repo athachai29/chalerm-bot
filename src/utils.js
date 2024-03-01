@@ -92,19 +92,19 @@ export function urlConverter(url) {
   try {
     const urlObj = new URL(url)
     if (!urlObj) {
-      return null
+      return {}
     }
   
     const videoId = urlObj.searchParams.get('v')
     if (!videoId) {
-      return null
+      return {}
     }
   
     return { videoId, url: `https://play.laibaht.ovh/watch${urlObj.search}` };
   } catch (err) {
     console.error(err)
 
-    return null
+    return {}
   }
 
 
