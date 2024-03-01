@@ -5,7 +5,6 @@ import { writeFile, access } from 'fs/promises';
 import { constants } from 'fs';
 
 const youtubeSharedRegex = /youtu\.be\/([a-zA-Z0-9_-]+)/;
-const youtubeLinkRegex = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
 const moneyBahtPlayRegex = /play\.laibaht\.ovh\/watch\?v=([a-zA-Z0-9_-]+)/;
 
 /**
@@ -85,27 +84,28 @@ export async function installGlobalCommands(appId, commands) {
  * }}
  */
 export function urlConverter(url) {
-  // Extract video ID from the input URL
-  let videoId = undefined;
-
   if (youtubeSharedRegex.test(url)) {
-    videoId = url.match(youtubeSharedRegex)?.[1];
-  }
+    const videoId = url.match(youtubeSharedRegex)?.[1];
 
-  if (youtubeLinkRegex.test(url)) {
-    videoId = url.match(youtubeLinkRegex)?.[1];
+    return { videoId, url: `https://play.laibaht.ovh/watch?v=${videoId}` }
   }
 
   if (moneyBahtPlayRegex.test(url)) {
     videoId = url.match(moneyBahtPlayRegex)?.[1];
+    return { videoId, url: `https://play.laibaht.ovh/watch?v=${videoId}` };
   }
 
+  const urlObj = new URL(url)
+  if (!urlObj) {
+    return null
+  }
+
+  const videoId = urlObj.searchParams.get('v')
   if (!videoId) {
-    return null;
+    return null
   }
 
-  // Construct the desired URL format
-  return { videoId, url: `https://play.laibaht.ovh/watch?v=${videoId}` };
+  return { videoId, url: `https://play.laibaht.ovh/watch?${urlObj.search}` };
 }
 
 /**
