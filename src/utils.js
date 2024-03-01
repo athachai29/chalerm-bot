@@ -5,7 +5,6 @@ import { writeFile, access } from 'fs/promises';
 import { constants } from 'fs';
 
 const youtubeSharedRegex = /youtu\.be\/([a-zA-Z0-9_-]+)/;
-// const moneyBahtPlayRegex = /play\.laibaht\.ovh\/watch\?v=([a-zA-Z0-9_-]+)/;
 
 /**
  *
@@ -78,10 +77,10 @@ export async function installGlobalCommands(appId, commands) {
 /**
  *
  * @param {string} url
- * @returns {{
+ * @returns {
  * url: string
  * videoId: string
- * }}
+ * }
  */
 export function urlConverter(url) {
   if (youtubeSharedRegex.test(url)) {
@@ -90,17 +89,25 @@ export function urlConverter(url) {
     return { videoId, url: `https://play.laibaht.ovh/watch?v=${videoId}` }
   }
 
-  const urlObj = new URL(url)
-  if (!urlObj) {
+  try {
+    const urlObj = new URL(url)
+    if (!urlObj) {
+      return null
+    }
+  
+    const videoId = urlObj.searchParams.get('v')
+    if (!videoId) {
+      return null
+    }
+  
+    return { videoId, url: `https://play.laibaht.ovh/watch${urlObj.search}` };
+  } catch (err) {
+    console.error(err)
+
     return null
   }
 
-  const videoId = urlObj.searchParams.get('v')
-  if (!videoId) {
-    return null
-  }
 
-  return { videoId, url: `https://play.laibaht.ovh/watch${urlObj.search}` };
 }
 
 /**
